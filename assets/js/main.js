@@ -401,6 +401,21 @@
       requestAnimationFrame(tick);
     };
 
+    /* il palco prende l'altezza della slide piu' alta: niente vuoti */
+    var palco = $('.ms-stage', ms);
+    function misura() {
+      if (!palco) return;
+      palco.classList.add('misuro');
+      var h = 0;
+      slides.forEach(function (sl) { h = Math.max(h, sl.offsetHeight); });
+      palco.classList.remove('misuro');
+      if (h) palco.style.setProperty('--ms-h', Math.ceil(h) + 'px');
+    }
+    misura();
+    window.addEventListener('resize', misura);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(misura);
+    setTimeout(misura, 1200);
+
     dots.forEach(function (d, k) { d.addEventListener('click', function () { vaiSlide(k); }); });
     var mp = $('.ms-prev', ms), mn = $('.ms-next', ms);
     if (mp) mp.addEventListener('click', function () { vaiSlide(cur - 1); });
@@ -524,16 +539,23 @@
      12. COOKIE
      --------------------------------------------------- */
   var ck = $('#cookie');
+  function altezzaCookie() {
+    var h = (ck && ck.classList.contains('show')) ? ck.offsetHeight + 14 : 0;
+    document.documentElement.style.setProperty('--ck-h', h + 'px');
+  }
   if (ck) {
     if (!localStorage.getItem('ba-cookie')) {
-      setTimeout(function () { ck.classList.add('show'); }, 1900);
+      setTimeout(function () { ck.classList.add('show'); altezzaCookie(); }, 1900);
     }
     $$('[data-ck]', ck).forEach(function (b) {
       b.addEventListener('click', function () {
         localStorage.setItem('ba-cookie', b.getAttribute('data-ck'));
         ck.classList.remove('show');
+        altezzaCookie();
       });
     });
+    window.addEventListener('resize', altezzaCookie);
+    altezzaCookie();
   }
 
   /* ---------------------------------------------------

@@ -209,7 +209,7 @@ h1,h2,h3,h4{margin:0;font-weight:400;letter-spacing:-.01em}
 }
 .hero .h1-sub{
   font-family:var(--display);text-transform:uppercase;color:var(--rosso);
-  font-size:clamp(21px,3.3vw,48px);line-height:1;letter-spacing:.02em;margin:0 0 26px;
+  font-size:clamp(26px,5.4vw,48px);line-height:1.04;letter-spacing:.02em;margin:2px 0 26px;
 }
 .hero-tag{
   max-width:62ch;font-size:clamp(14px,1.25vw,17px);line-height:1.65;color:var(--acc-2);
@@ -455,8 +455,10 @@ form.contatti .full{grid-column:1/-1}
 .foot-bottom a:hover{color:#fff}
 
 /* ---------- HUD bilancia ---------- */
-.scale-hud{position:fixed;right:18px;bottom:18px;z-index:800;width:210px;transform:translateY(160%);transition:transform .6s var(--ease)}
-.scale-hud.show{transform:none}
+.scale-hud{position:fixed;right:18px;bottom:18px;z-index:800;width:210px;
+  transform:translateY(160%);opacity:0;visibility:hidden;
+  transition:transform .6s var(--ease),opacity .4s ease,visibility .4s}
+.scale-hud.show{transform:none;opacity:1;visibility:visible}
 .scale-hud .lcd-screen{padding:9px 12px}
 .scale-hud .bar{height:6px;background:#0C1105;border-radius:99px;margin-top:8px;overflow:hidden;box-shadow:inset 0 1px 4px rgba(0,0,0,.8)}
 .scale-hud .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--lcd-dim),var(--lcd));border-radius:99px}
@@ -545,12 +547,13 @@ form.contatti .full{grid-column:1/-1}
   .topbar .sep{display:none}
   form.contatti{grid-template-columns:1fr}
   .foot-grid{grid-template-columns:1fr}
-  .scale-hud{width:172px;right:12px;bottom:12px}
-  .cookie{left:12px;right:12px;max-width:none;bottom:12px}
+  .scale-hud{width:132px;right:9px;bottom:9px}
+  .cookie{left:8px;right:8px;max-width:none;bottom:8px;padding:13px 15px;gap:11px}
+  .cookie p{font-size:13px;line-height:1.45}
+  .cookie .acts{display:flex;flex-wrap:nowrap;gap:8px;align-items:center;width:100%}
+  .cookie button{padding:9px 15px;font-size:13px;flex:0 0 auto}
+  .cookie a{margin-left:auto;font-size:12px}
   .prod-num{-webkit-text-stroke-width:1.5px}
-}
-@media (max-width:520px){
-  .scale-hud{display:none}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
@@ -813,3 +816,28 @@ body.lb-aperto{overflow:hidden}
 
 #marchi{padding-bottom:0}
 .ms-ticker{margin-bottom:0}
+
+/* ---------- correzioni mobile ---------- */
+/* la bilancia si alza quando il banner cookie e' a video */
+.scale-hud{bottom:calc(18px + var(--ck-h, 0px))}
+.ms-stage{min-height:var(--ms-h, 290px)}
+
+@media (max-width:720px){
+  .hero{min-height:min(86svh,720px)}
+  .scale-hud{bottom:calc(10px + var(--ck-h, 0px))}
+  .scale-hud .lcd-screen{padding:8px 10px}
+  .scale-hud .lcd-screen .big{font-size:19px}
+  .scale-hud .lcd-screen .lbl{font-size:8px;letter-spacing:.16em}
+  .scale-hud .foot{font-size:7.5px;letter-spacing:.12em;margin-top:6px}
+  .scale-hud .bar{height:5px;margin-top:6px}
+  .ms-stage{min-height:var(--ms-h, 250px)}
+  .ms-ctrl{margin-top:24px;gap:10px}
+  .ms-bar{width:min(120px,28vw)}
+  .off .ph{aspect-ratio:1}
+  .about-tags{gap:7px}
+  .tag{font-size:10.5px;padding:7px 11px}
+}
+
+/* misurazione dell'altezza delle slide senza far lampeggiare quella attiva */
+.ms-stage.misuro .ms-slide:not(.on){position:relative;visibility:hidden;opacity:0;transform:none;transition:none}
+.ms-stage.misuro .ms-slide li{opacity:1;transform:none;animation:none}
