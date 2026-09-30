@@ -238,10 +238,10 @@
           for (const it of S.items) {
             if (it.gone) { it.x += it.vx * dt; it.y += it.vy * dt; it.vy += 1600 * dt; it.rot += it.vr * dt; continue; }
             it.x += S.sp * dt;
-            if (it.x > 1004) {
+            if (it.x > 950) {
               it.gone = 2;
-              if (it.bad) { S.lives--; api.sfx('zap'); api.vib(120); P.burst(1040, 400, 18, { col: ['#E11D2E', '#555'], speed: 360 }); P.text(1040, 330, 'INTRUSO!', '#FF8A93', 40); api.hud('vite', '♥'.repeat(Math.max(0, S.lives)) + '♡'.repeat(3 - Math.max(0, S.lives)), 'bad'); if (S.lives <= 0) fin(true); }
-              else { S.good++; S.score += 10; api.sfx('thunk'); P.burst(1070, 400, 8, { col: ['#E58580', '#F6DDD2'], speed: 260, life: 0.5 }); api.hud('lavorati', `${S.good}/${v.goal}`); if (S.good >= v.goal) fin(false); }
+              if (it.bad) { S.lives--; api.sfx('zap'); api.vib(120); P.burst(980, 400, 18, { col: ['#E11D2E', '#555'], speed: 360 }); P.text(980, 330, 'INTRUSO!', '#FF8A93', 40); api.hud('vite', '♥'.repeat(Math.max(0, S.lives)) + '♡'.repeat(3 - Math.max(0, S.lives)), 'bad'); if (S.lives <= 0) fin(true); }
+              else { S.good++; S.score += 10; api.sfx('thunk'); P.burst(1000, 400, 8, { col: ['#E58580', '#F6DDD2'], speed: 260, life: 0.5 }); api.hud('lavorati', `${S.good}/${v.goal}`); if (S.good >= v.goal) fin(false); }
             }
           }
           S.items = S.items.filter((it) => it.gone === 0 || (it.gone === 1 && it.y < 820));
@@ -254,8 +254,7 @@
           G.box(c, -20, 510, 1100, 20, 8, G.steel(c, 0, 510, 0, 530), 4);
           for (const x of [120, 500, 900]) { G.box(c, x, 530, 30, 120, 6, G.steel(c, x, 0, x + 30, 0), 4); }
           // macchina
-          c.save(); c.translate(1020, 160); c.scale(1.7, 1.7); G.drawImgFit(c, G.svgImg(A.sprite('grinder'), 200, 200), 0, 0, 200, 200); c.restore();
-          G.box(c, 1000, 360, 60, 90, 10, '#0A1B3F', 0);
+          c.save(); c.translate(900, 170); c.scale(1.6, 1.6); G.drawImgFit(c, G.svgImg(A.sprite('grinder'), 200, 200), 0, 0, 200, 200); c.restore();
           for (const it of S.items) if (!it.gone || it.gone === 1) drawIt(c, it);
           P.draw(c);
           G.box(c, 480, 18, 320, 26, 13, '#fff', 4); G.box(c, 484, 22, Math.max(0, 312 * BQ.clamp(S.good / v.goal, 0, 1)), 18, 9, '#3FA06A', 0);
@@ -437,7 +436,7 @@
           const q = qs[Math.min(S.i, qs.length - 1)];
           G.box(c, 70, 24, 1140, v.mode === 'spec' ? 290 : 280, 26, '#fff', 5);
           if (v.mode === 'spec') { G.box(c, 100, 50, 240, 240, 16, '#fff', 4); G.drawImgFit(c, G.img(PHOTO(q.it)), 108, 58, 224, 224); G.text(c, 'QUALE SCHEDA TECNICA È GIUSTA?', 370, 74, { size: 24, align: 'left', color: '#E11D2E', stroke: false }); G.wrapText(c, q.it.t, 370, 160, 800, 46, NAVY); }
-          else { G.text(c, 'QUALE FOTO È…', 640, 70, { size: 26, color: '#E11D2E', stroke: false }); G.wrapText(c, q.it.t, 640, 160, 1000, 52, NAVY); c.textAlign = 'center'; }
+          else { G.text(c, 'QUALE FOTO È…', 640, 70, { size: 26, color: '#E11D2E', stroke: false }); G.wrapText(c, q.it.t, 640, 160, 1000, 52, NAVY, 'center'); }
           q.opts.forEach((o, i) => {
             const r = rects[i]; const chosen = S.sel === i, right = i === q.ans, show = S.sel >= 0;
             G.box(c, r[0], r[1], r[2], r[3], 20, show ? (right ? '#9BE7B5' : chosen ? '#FF9CA4' : '#fff') : '#fff', 5);

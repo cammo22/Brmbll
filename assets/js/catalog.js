@@ -46,8 +46,9 @@
     let sx = null, sy = 0;
     book.addEventListener('pointerdown', (e) => { if (e.target.closest('button,a,img')) { sx = null; return; } sx = e.clientX; sy = e.clientY; });
     book.addEventListener('pointerup', (e) => { if (sx == null) return; const dx = e.clientX - sx, dy = e.clientY - sy; sx = null; if (Math.abs(dx) > 80 && Math.abs(dx) > Math.abs(dy) * 1.5) go(cur + (dx < 0 ? 1 : -1)); });
-    const mq = window.matchMedia('(max-width:900px)'); narrow = mq.matches;
-    mq.addEventListener('change', () => { narrow = mq.matches; render(); });
+    const calcNarrow = () => window.innerWidth < 640 || (window.innerWidth < 900 && window.innerHeight > 480);
+    narrow = calcNarrow();
+    window.addEventListener('resize', () => { const n = calcNarrow(); if (n !== narrow) { narrow = n; render(); } });
   };
 
   function go(i, noAnim) {
@@ -76,7 +77,7 @@
 
   function render() {
     const pg = pages[cur];
-    book.className = 'book' + (pg.rep ? ' tc' + pg.rep.tc : '');
+    book.className = 'book' + (pg.rep ? ' tc' + pg.rep.tc : '') + (narrow ? ' one' : '');
     $$('button', tabs).forEach((b) => b.classList.toggle('on', !!pg.rep && b.dataset.rep === pg.rep.id));
     [...book.querySelectorAll('.page')].forEach((n) => n.remove());
     let L = [], R = [];
@@ -86,7 +87,7 @@
       R = [el('h3', { class: 'pg-h', text: 'Indice dei reparti' }), el('div', { class: 'toc' }, ...BQ.items.REPS.map((r) => el('button', { class: 'tc' + r.tc, html: `${r.name}<small>${r.items.length} articoli</small>`, on: { click: () => go(pages.findIndex((p) => p.type === 'cover' && p.rep === r)) } })))];
     } else if (pg.type === 'cover') {
       const r = pg.rep, stars = r.items.reduce((a, it) => a + BQ.items.itemStars(it), 0);
-      L = [el('div', { class: 'cover', html: `<div class="stk">${A.sprite(r.icon)}</div><span class="pg-rep">Reparto</span><h2>${r.name}</h2><p>${r.blurb}</p><p><b>${r.items.length}</b> articoli · ${stars} ★ guadagnate</p><p><a class="btn sm" href="assets/pdf/${r.pdf}" target="_blank" rel="noopener">Catalogo PDF completo</a></p>` })];
+      L = [el('div', { class: 'cover', html: `<div class="stk">${A.sprite(r.icon)}</div><span class="pg-rep">Reparto</span><h2>${r.name}</h2><p>${r.blurb}</p><p><b>${r.items.length}</b> articoli · ${stars} ★ guadagnate</p><p><a class="btn sm" href="${BQ.pdf(r.pdf)}" target="_blank" rel="noopener">Catalogo PDF completo</a></p>` })];
       R = [el('h3', { class: 'pg-h', text: 'Tutti gli articoli' }), el('div', { class: 'varlist' }, ...r.items.map((it) => el('button', { class: 'mgc', html: `<div class="ic2">${it.img ? `<img src="${it.img}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:contain">` : ''}</div><div><b style="font-size:.9rem">${it.title}</b><small>n. ${it.n} · ${BQ.items.playsFor(it).length} minigiochi</small></div><div class="go">${UI.stars(Math.min(3, Math.floor(BQ.items.itemStars(it) / 3)))}</div>`, on: { click: () => go(pages.findIndex((p) => p.item === it)) } })))];
     } else {
       const it = pg.item, plays = BQ.items.playsFor(it);
@@ -95,7 +96,7 @@
         el('h2', { class: 'pg-title', text: it.title }),
         el('div', { class: 'pg-photo' }, el('div', { class: 'im' }, it.img ? el('img', { src: it.img, alt: it.title, on: { click: () => zoom(it) } }) : null)),
         el('div', { html: specHtml(it) }),
-        el('p', { html: `<a class="btn sm" href="assets/pdf/${it.rep.pdf}" target="_blank" rel="noopener">Apri il catalogo PDF</a> <a class="btn sm gold" href="tel:039650938">Chiedi info · 039650938</a>` })];
+        el('p', { html: `<a class="btn sm" href="${BQ.pdf(it.rep.pdf)}" target="_blank" rel="noopener">Apri il catalogo PDF</a> <a class="btn sm gold" href="tel:039650938">Chiedi info · 039650938</a>` })];
       R = [el('h3', { class: 'pg-h', text: 'Minigiochi di questo articolo' }),
         el('div', { class: 'mgcards' }, ...plays.map((p) => el('button', { class: 'mgc', html: `<div class="ic2">${p.icon ? A.sprite(p.icon) : ''}</div><div><b>${p.game_name}</b><small>${p.name}${p.blurb ? ' — ' + p.blurb : ''}</small></div><div class="go">${UI.stars(BQ.save.stars(p.id))}<span class="p">${A.ico('play')}</span></div>`, on: { click: () => play(it, p) } }))),
         el('p', { class: 'pg-spec', style: { marginTop: '16px' }, html: `Stelle su questo articolo: <b>${BQ.items.itemStars(it)}</b> / ${plays.length * 3}` })];

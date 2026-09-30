@@ -53,6 +53,20 @@
     }
   }
 
+  /* ---------- tasto Indietro di Android ---------- */
+  function androidBack() {
+    const cap = window.Capacitor, App = cap && cap.Plugins && cap.Plugins.App;
+    if (!App) return;
+    App.addListener('backButton', () => {
+      const zoom = $('.zoom'); if (zoom) { zoom.remove(); return; }
+      if (BQ.mini.isActive()) { const c = $('#layer-mini .iconbtn:last-child'); if (c) c.click(); return; }
+      if (!$('#layer-modal').hidden) { const x = $('#layer-modal .x'); if (x) x.click(); return; }
+      if (!$('#layer-dlg').hidden) { UI.skipDlg(); return; }
+      if (BQ.current === 'adv' && BQ.adv.cur && BQ.scenes[BQ.adv.cur].back && !BQ.adv.busy) { BQ.adv.back(); return; }
+      if (BQ.current !== 'menu') BQ.go('menu'); else App.exitApp();
+    });
+  }
+
   function route() {
     const h = (location.hash || '').replace(/^#\/?/, '').split('/');
     if (h[0] === 'catalogo') { BQ.go('catalog', { item: h[1] }); return true; }
@@ -69,7 +83,7 @@
     BQ.screens.menu.init(app); BQ.catalog.init(app); BQ.screens.arcade.init(app); BQ.screens.info.init(app); BQ.adv.init(app);
     BQ.items.all.forEach(() => {});
     if (!route()) BQ.go('menu');
-    cookieBanner(); pwa();
+    cookieBanner(); pwa(); androidBack();
     window.addEventListener('hashchange', () => { if (!BQ.mini.isActive()) route(); });
     document.documentElement.classList.add('ready');
     BQ.bus.on('setting', (k) => { if (k === 'music' || k === 'sound') { const m = $('#tMusic'); if (m) m.classList.toggle('off', !BQ.save.setting('music')); } });

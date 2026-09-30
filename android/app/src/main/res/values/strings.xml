@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Brambilla Quest</string>
+    <string name="title_activity_main">Brambilla Quest</string>
+    <string name="package_name">it.brambillaangelo.quest</string>
+    <string name="custom_url_scheme">it.brambillaangelo.quest</string>
+</resources>

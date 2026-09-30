@@ -10,5 +10,6 @@ mkdirSync(out, { recursive: true });
 for (const f of ['index.html', 'manifest.webmanifest', 'informativa-privacy.html', 'cookies.html']) {
   if (existsSync(resolve(root, f))) cpSync(resolve(root, f), resolve(out, f));
 }
-cpSync(resolve(root, 'assets'), resolve(out, 'assets'), { recursive: true });
+// i PDF (12 MB) restano online: nelle app i link puntano al sito
+cpSync(resolve(root, 'assets'), resolve(out, 'assets'), { recursive: true, filter: (src) => !/[\\/]assets[\\/]pdf/.test(src) });
 console.log('www/ pronta');

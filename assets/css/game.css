@@ -314,8 +314,7 @@ img{display:block;max-width:100%}
 .cat-results button:hover{background:#FFF6D0}
 .cat-results img{width:40px;height:40px;object-fit:contain;flex:none}
 .cat-results small{display:block;color:#657;font-weight:600}
-.book.single .page.l{display:none}.book.single .page.r{border-radius:22px;border-left-width:5px}
-@media (max-width:900px){.book .page.l{display:none}.book .page.r{border-radius:22px;border-left-width:5px}.sheet{width:100%;border-radius:22px}}
+.book.one .page.r{border-radius:22px;border-left-width:5px}.book.one .sheet{width:100%;border-radius:22px}
 .tc0{--tc:#CFE0F5;--tc2:#215FD6}.tc1{--tc:#D9EFDD;--tc2:#3FA06A}.tc2{--tc:#F6D5D5;--tc2:#E11D2E}.tc3{--tc:#FBE2C4;--tc2:#FF8A1E}.tc4{--tc:#CFE9E5;--tc2:#1D8F8A}.tc5{--tc:#E2DAF5;--tc2:#7A5CD0}
 .cover{display:grid;place-items:center;text-align:center;padding:10px}
 .cover h2{font-family:var(--display);font-weight:400;font-size:clamp(2rem,6vh,3.4rem);line-height:.95;text-transform:uppercase;margin:.2em 0}
@@ -331,7 +330,7 @@ img{display:block;max-width:100%}
 .arc-card{background:#fff;border:5px solid var(--navy);border-radius:22px;box-shadow:0 7px 0 var(--navy);padding:12px;display:flex;flex-direction:column;gap:6px;text-align:left;transition:transform .15s}
 .arc-card:hover{transform:translateY(-4px) rotate(-.4deg)}
 .arc-card .th{height:118px;border-radius:14px;border:3px solid var(--navy);display:grid;place-items:center;background:var(--tc,#DCEEFF);overflow:hidden}
-.arc-card .th svg{height:100%;width:auto}
+.arc-card .th svg{height:100%;width:100%}
 .arc-card h3{font-family:var(--display);font-weight:400;font-size:1.3rem;letter-spacing:.04em;margin:.1em 0 0;text-transform:uppercase;line-height:1.05}
 .arc-card p{margin:0;font-size:.86rem;font-weight:600;color:#3a4a6b}
 .arc-card .row{display:flex;justify-content:space-between;align-items:center;margin-top:auto}
@@ -418,3 +417,24 @@ body.legal-page td,body.legal-page th{border:2px solid var(--navy);padding:.4em 
 
 @media (max-height:800px) and (min-width:700px){.menu-tag{font-size:.9rem;margin:.6em 0 .8em}.menu-btns{gap:8px 10px}.menu-btns .btn{font-size:1rem;padding:.5em .9em}.menu-btns .big{font-size:1.3rem;padding:.55em 1em}.logo-kicker{font-size:.66rem}}
 @media (max-height:700px) and (min-width:700px){.menu-tag{display:none}}
+
+/* ---------- telefoni ---------- */
+@media (max-width:560px){
+  .topnav .brand span{display:none}.topnav nav{margin-left:auto}.topnav .tools .iconbtn{width:34px;height:34px}.topnav .tools #tFs{display:none}.topnav{gap:6px}
+  .menu-foot span:first-child{display:none}.menu-foot{bottom:44px;justify-content:center}
+}
+@media (max-height:480px){
+  .cat-wrap{padding-top:4px;gap:5px}.cat-tabs button{font-size:.7rem;padding:.15em .6em}.cat-bar .iconbtn{width:34px;height:34px}.cat-search input{padding:.25em .6em .25em 2.2em;font-size:.85rem}
+  .page-in{padding:10px 14px}.pg-photo{max-width:none;margin:10px auto 8px;padding:6px}.pg-photo .im{aspect-ratio:auto;height:38vh}.pg-title{font-size:1.15rem}
+  .mgc{padding:5px 8px 5px 5px;gap:8px}.mgc .ic2{width:44px;height:44px}.mgc b{font-size:.9rem}.mgc small{font-size:.68rem}
+  .isec{padding-top:20px}.info-sub{padding:6px 2px}
+  .menu-body{max-width:none;flex-direction:column;justify-content:center;padding-bottom:calc(var(--sab) + 50px)}
+  .logo-kicker,.menu-tag,.menu-rank{display:none}
+  .logo-title{font-size:min(15vh,4.2rem);line-height:.9;margin:0}.logo-title br{display:none}.logo-title em{margin-left:.25em}
+  .logo-sub{font-size:.85rem;margin:.4em 0 .7em;border-width:3px;padding:.1em .6em}
+  .menu-btns{max-width:560px;gap:6px 8px}.menu-btns .btn{font-size:.8rem;padding:.4em .7em;border-width:3px;border-radius:12px;box-shadow:0 3px 0 var(--navy)}.menu-btns .big{font-size:1rem;padding:.45em .8em}
+  .menu-foot{bottom:0;font-size:.6rem}
+}
+
+.mg-card .acts{position:sticky;bottom:-18px;background:var(--paper);padding:8px 0 4px;margin-top:6px}
+@media (max-height:480px){.mg-card .kick{display:none}.mg-card h2{font-size:1.3rem}.mg-card .howto li{font-size:.72rem;padding:.2em .5em}.mg-card .det{font-size:.8rem;margin:2px 0}.mg-card .acts{bottom:-10px}.mg-card .sc{font-size:1.2rem}.mg-card .rs svg{width:38px;height:38px}}

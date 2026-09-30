@@ -85,6 +85,8 @@
     touch: 'ontouchstart' in window || navigator.maxTouchPoints > 0,
   };
   BQ.env.app = BQ.env.electron || BQ.env.capacitor;
+  // nelle app i PDF (12 MB) non sono inclusi: si aprono dal sito online
+  BQ.pdf = (f) => (BQ.env.app ? 'https://cammo22.github.io/Brmbll/assets/pdf/' : 'assets/pdf/') + f;
 
   /* ---------- salvataggio ---------- */
   const KEY = 'bq.save.v1';

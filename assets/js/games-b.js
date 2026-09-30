@@ -166,8 +166,8 @@
       newCustomer(); api.hud('punti', 0);
       const sum = () => S.tray.reduce((a, b) => a + b, 0);
       const due = () => S.given - S.price;
-      const btnY = 560, bw = 130, bx0 = 50;
-      const slotRect = (i) => [bx0 + i * (bw + 8), btnY, bw, 120];
+      const btnY = 560, bw = 124, bx0 = 40;
+      const slotRect = (i) => [bx0 + i * (bw + 6), btnY, bw, 120];
       const inR = (r, x, y) => x >= r[0] && x <= r[0] + r[2] && y >= r[1] && y <= r[1] + r[3];
       const B_DELIVER = [930, 410, 300, 80], B_CLEAR = [930, 500, 300, 50];
       function deliver() {
@@ -399,7 +399,7 @@
           if (inR(B_W, x, y)) return weigh();
           if (inR(B_G, x, y)) { S.mode = S.mode === 'guess' ? 'weigh' : 'guess'; S.msg = S.mode === 'guess' ? 'Tocca il peso che credi falso' : 'Modalità pesata'; api.sfx('click'); return; }
           for (let i = 0; i < N; i++) {
-            const cx = wx(i), cy = 560;
+            const cx = wx(i), cy = 545;
             if (S.pos[i] === 0 && Math.hypot(x - cx, y - cy) < 48) { if (S.mode === 'guess') return guess(i); const l = S.pos.filter((p) => p === 1).length, r = S.pos.filter((p) => p === 2).length; if (l <= r && l < maxW) S.pos[i] = 1; else if (r < maxW) S.pos[i] = 2; else S.pos[i] = 1; api.sfx('tap'); return; }
           }
           // peso sui piatti -> torna in panchina (o, in modalità guess, selezione)
@@ -423,7 +423,7 @@
           }
           // pesi
           const drawW = (i, x, y, s) => { const f = S.found && i === fake; G.circ(c, x, y, 40 * s, G.lin(c, x - 40, y - 40, x + 40, y + 40, [[0, f ? '#FFF6BF' : '#F2F5FA'], [1, f ? '#E7B93A' : '#93A0B0']]), 5); G.disp(c, String(i + 1), x, y + 3, { size: 36 * s, color: NAVY, stroke: false }); };
-          S.pos.forEach((p, i) => { if (p === 0) { const ex = wx(i), ey = 560 + (S.mode === 'guess' ? Math.sin(S.t * 6 + i) * 4 : 0); G.shadow(c, ex, ey + 40, 34, 8, 0.25); drawW(i, ex, ey, 1); } else { const q = plateW(i, p); drawW(i, q.x, q.y, 0.78); } });
+          S.pos.forEach((p, i) => { if (p === 0) { const ex = wx(i), ey = 545 + (S.mode === 'guess' ? Math.sin(S.t * 6 + i) * 4 : 0); G.shadow(c, ex, ey + 40, 34, 8, 0.25); drawW(i, ex, ey, 1); } else { const q = plateW(i, p); drawW(i, q.x, q.y, 0.78); } });
           // bottoni
           G.box(c, ...B_W, 22, '#3FA06A', 6); G.disp(c, 'PESA', B_W[0] + B_W[2] / 2, B_W[1] + 48, { size: 48 });
           G.box(c, ...B_G, 22, S.mode === 'guess' ? '#F2C340' : '#fff', 6); G.disp(c, 'È QUESTO!', B_G[0] + B_G[2] / 2, B_G[1] + 48, { size: 40, color: NAVY, stroke: false });

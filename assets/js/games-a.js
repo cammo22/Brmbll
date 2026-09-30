@@ -309,8 +309,8 @@
     },
   });
 
-  function wrapText(c, text, x, y, maxW, lh, color) {
-    c.save(); c.font = '800 ' + (lh - 4) + 'px Archivo, sans-serif'; c.fillStyle = color; c.textBaseline = 'middle'; c.textAlign = 'left';
+  function wrapText(c, text, x, y, maxW, lh, color, align) {
+    c.save(); c.font = '800 ' + (lh - 4) + 'px Archivo, sans-serif'; c.fillStyle = color; c.textBaseline = 'middle'; c.textAlign = align || 'left';
     const words = String(text).split(' '); let line = '', yy = y - (words.join(' ').length > 40 ? lh * 0.5 : 0); const lines = [];
     for (const w of words) { const t = line ? line + ' ' + w : w; if (c.measureText(t).width > maxW && line) { lines.push(line); line = w; } else line = t; }
     lines.push(line);

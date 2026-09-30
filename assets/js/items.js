@@ -29,7 +29,7 @@
   const RULES = [
     [/morsa per prosciutto/, () => [['slice', 'crudo'], ['trace', 'prosciutto'], ['sharpen', 'coltello']]],
     [/volano/, (it) => [['flywheel', it.h % 2 ? 'base' : 'fiore'], ['slice', 'crudo'], ['sharpen', 'affettatrice']]],
-    [/affettatric/, (it) => [['slice', FOOD_BY[it.h % 7]], ['sharpen', 'affettatrice'], ['polish', 'affettatrice']]],
+    [/affettatric/, (it) => [['slice', 'crudo'], ['slice', FOOD_BY[1 + (it.h % 6)]], ['sharpen', 'affettatrice']]],
     [/registrator|rendiresto|controlla valute|eliminacode|prezzatric/, (it) => [['change', ['cassa', 'cassetto', 'fiscale'][it.h % 3]], ['keypad', 'prezzi'], ['simon', 'tastiera']]],
     [/bilanc|bilichetto/, (it) => [['pour', 'bilancia'], ['fakeweight', ['nove', 'sei', 'dodici'][it.h % 3]], ['needle', 'taratura'], ['keypad', 'peso']].slice(0, 3 + (it.h % 2))],
     [/rotoli|etichett|targhe|segnaprezzi|lavagn|spill|clip per|punte /, (it) => [['keypad', 'prezzi'], ['stack', 'casse']]],

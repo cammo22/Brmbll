@@ -25,13 +25,32 @@
     "appId": "it.brambillaangelo.quest",
     "productName": "Brambilla Quest",
     "artifactName": "Brambilla-Quest-Windows-Portable.${ext}",
-    "directories": { "output": "dist", "buildResources": "resources" },
-    "files": ["native/electron/**/*", "www/**/*", "package.json"],
+    "directories": {
+      "output": "dist",
+      "buildResources": "resources"
+    },
+    "files": [
+      "native/electron/**/*",
+      "www/**/*",
+      "package.json"
+    ],
     "win": {
-      "target": [{ "target": "portable", "arch": ["x64"] }],
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
       "icon": "resources/icon.png"
     },
-    "portable": { "artifactName": "Brambilla-Quest-Windows-Portable.exe" },
+    "portable": {
+      "artifactName": "Brambilla-Quest-Windows-Portable.exe"
+    },
     "compression": "normal"
+  },
+  "dependencies": {
+    "@capacitor/app": "^8.1.1"
   }
 }
