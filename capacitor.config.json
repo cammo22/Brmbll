@@ -1,0 +1,13 @@
+{
+  "appId": "it.brambillaangelo.quest",
+  "appName": "Brambilla Quest",
+  "webDir": "www",
+  "backgroundColor": "#0A1B3F",
+  "android": {
+    "allowMixedContent": false,
+    "backgroundColor": "#0A1B3F"
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}
