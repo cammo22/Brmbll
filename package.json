@@ -1,0 +1,56 @@
+{
+  "name": "brambilla-quest",
+  "productName": "Brambilla Quest",
+  "version": "1.0.0",
+  "description": "Brambilla Quest — l'avventura grafica di Brambilla Angelo s.r.l. (Agrate Brianza)",
+  "author": "Brambilla Angelo s.r.l.",
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "native/electron/main.js",
+  "scripts": {
+    "stage": "node scripts/stage-www.mjs",
+    "serve": "python3 -m http.server 8123",
+    "android:sync": "npm run stage && npx cap sync android",
+    "electron": "npm run stage && electron .",
+    "dist:win": "npm run stage && electron-builder --win portable --x64 --publish never"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^8.5.2",
+    "@capacitor/cli": "^8.5.2",
+    "@capacitor/core": "^8.5.2",
+    "electron": "^44.5.1",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "it.brambillaangelo.quest",
+    "productName": "Brambilla Quest",
+    "artifactName": "Brambilla-Quest-Windows-Portable.${ext}",
+    "directories": {
+      "output": "dist",
+      "buildResources": "resources"
+    },
+    "files": [
+      "native/electron/**/*",
+      "www/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "resources/icon.png"
+    },
+    "portable": {
+      "artifactName": "Brambilla-Quest-Windows-Portable.exe"
+    },
+    "compression": "normal"
+  },
+  "dependencies": {
+    "@capacitor/app": "^8.1.1"
+  }
+}

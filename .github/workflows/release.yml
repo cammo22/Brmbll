@@ -1,0 +1,110 @@
+name: Release (Android + Windows)
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag della release (es. v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+  push:
+    tags: ['v*']
+  pull_request:
+    paths: ['android/**', 'native/**', 'package.json', 'package-lock.json', 'capacitor.config.json', 'scripts/**', '.github/workflows/release.yml']
+
+permissions:
+  contents: write
+
+jobs:
+  android:
+    name: APK Android
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 21 }
+      - name: SDK Android (licenze e piattaforma 36)
+        run: |
+          SDKM="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          [ -x "$SDKM" ] || SDKM="$(ls -d $ANDROID_HOME/cmdline-tools/*/bin/sdkmanager | tail -1)"
+          yes | "$SDKM" --licenses > /dev/null || true
+          "$SDKM" "platforms;android-36" "build-tools;36.0.0" "platform-tools"
+      - run: npm ci
+      - name: Prepara il sito e sincronizza Capacitor
+        run: |
+          npm run stage
+          npx cap sync android
+      - name: Keystore di rilascio (se presente nei secrets)
+        env:
+          KS: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KS" ]; then
+            echo "$KS" | base64 -d > "$RUNNER_TEMP/release.keystore"
+            echo "BQ_KEYSTORE_FILE=$RUNNER_TEMP/release.keystore" >> "$GITHUB_ENV"
+            echo "BQ_KEYSTORE_PASSWORD=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> "$GITHUB_ENV"
+            echo "BQ_KEY_ALIAS=${{ secrets.ANDROID_KEY_ALIAS }}" >> "$GITHUB_ENV"
+          fi
+      - name: Compila l'APK
+        working-directory: android
+        run: ./gradlew --no-daemon assembleRelease
+      - name: Rinomina e carica
+        run: |
+          mkdir -p out
+          cp android/app/build/outputs/apk/release/*.apk out/Brambilla-Quest-Android.apk
+          ls -la out
+      - uses: actions/upload-artifact@v4
+        with: { name: android, path: out/Brambilla-Quest-Android.apk, if-no-files-found: error }
+
+  windows:
+    name: Windows portatile
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - name: Compila l'eseguibile portatile
+        run: npm run dist:win
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - run: Get-ChildItem dist
+        shell: pwsh
+      - uses: actions/upload-artifact@v4
+        with: { name: windows, path: dist/Brambilla-Quest-Windows-Portable.exe, if-no-files-found: error }
+
+  release:
+    name: Pubblica la release
+    needs: [android, windows]
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { path: artifacts }
+      - name: Crea o aggiorna la release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.inputs.tag || github.ref_name }}
+        run: |
+          find artifacts -type f
+          cat > notes.md <<'NOTES'
+          ## Brambilla Quest — Il mistero della Lama d'Oro
+
+          L'avventura grafica di **Brambilla Angelo s.r.l.** (Agrate Brianza): storia in 6 capitoli più finale,
+          catalogo sfogliabile con i 251 articoli dei cataloghi e oltre 700 minigiochi — sì, anche affettare il prosciutto crudo!
+
+          ### Download
+          - **Android** — `Brambilla-Quest-Android.apk` (Android 7.0+). Apri il file e consenti l'installazione da questa origine.
+          - **Windows** — `Brambilla-Quest-Windows-Portable.exe`: versione portatile, non richiede installazione (64 bit). Al primo avvio Windows SmartScreen potrebbe chiedere conferma: «Ulteriori informazioni → Esegui comunque».
+
+          Gioca anche dal browser: https://cammo22.github.io/Brmbll/
+          NOTES
+          sed -i 's/^          //' notes.md
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" artifacts/android/Brambilla-Quest-Android.apk artifacts/windows/Brambilla-Quest-Windows-Portable.exe --clobber
+          else
+            gh release create "$TAG" artifacts/android/Brambilla-Quest-Android.apk artifacts/windows/Brambilla-Quest-Windows-Portable.exe \
+              --title "Brambilla Quest $TAG" --notes-file notes.md --target "${{ github.sha }}" --latest
+          fi
