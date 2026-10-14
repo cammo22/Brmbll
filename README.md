@@ -6,6 +6,7 @@
   </a>
   <a href="https://github.com/cammo22/Brmbll/releases/latest">
     <img src="https://img.shields.io/badge/%E2%AC%87%20ANDROID%20%2B%20WINDOWS-ultima%20release-3FA06A?style=for-the-badge&labelColor=0A1B3F" alt="Scarica Android e Windows">
+[![Discord](https://img.shields.io/badge/Discord-DaProd-5865F2?logo=discord&logoColor=white)](https://discord.gg/Njs52aacwq)
   </a>
 </p>
 
